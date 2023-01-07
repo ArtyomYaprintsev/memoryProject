@@ -1,0 +1,6 @@
+/venv
+/project/project/settings.py
+/project/db.qlite3
+
+*migrations
+*.pyc
