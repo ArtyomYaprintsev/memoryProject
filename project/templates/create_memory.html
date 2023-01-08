@@ -1,0 +1,82 @@
+{% extends "base_template_with_header.html" %}
+
+{% block title %}
+{% if action == 'edit' %}
+Edit memory #{{ memory_id }}
+{% elif action == 'create' %}
+Create new memory
+{% else %}
+Unknown action!
+{% endif %}
+{% endblock title %}
+
+{% block content %}
+<div class="mt-3 mb-3">
+    <h3>Create new memory</h3>
+    <form action="{% if action == 'edit' %}{% url 'edit_memory' memory_id=memory_id %}{% elif action == 'create' %}{% url 'create_memory' %}{% else %}#{% endif %}"
+          method="post"
+          style="display: flex; flex-direction: column">
+        {% csrf_token %}
+        <div id="memory-map"
+             style="width: 100%; aspect-ratio: 1 / 1; max-height: 400px"></div>
+        {{ form }}
+        <div class="">
+            <a href="{% url 'list_memory' %}" class="btn btn-danger">Вернуться к
+                списку</a>
+            {% if not user_error %}
+            <button type="submit" class="btn btn-success">Сохранить</button>
+            {% endif %}
+        </div>
+    </form>
+
+    {% if messages %}
+    <div class="messages mt-3 mb-3">
+        {% for message in messages %}
+        <div
+            {% if message.tags %}
+            class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-{{ message.tags}}{% endif %}"
+            {% endif %}
+            role="alert"
+        >
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+{% endblock content %}
+
+{% block script %}
+<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=d0e22896-d79d-4c71-90f1-602a28925377"
+        type="text/javascript"></script>
+<script>
+    const memoryLocation = document.getElementById("id_location")
+
+    if (memoryLocation) {
+        const parsedMemoryLocation = JSON.parse(memoryLocation.value);
+
+        ymaps.ready(
+            function () {
+                const myMap = new ymaps.Map('memory-map', {
+                    center: parsedMemoryLocation,
+                    zoom: [18]
+                })
+
+                myMap.geoObjects.add(
+                    new ymaps.Placemark(
+                        parsedMemoryLocation,
+                    )
+                )
+
+                myMap.events.add('click', function (e) {
+                    const [xCoord, yCoord] = e.get('coords');
+
+                    myMap.geoObjects.splice(0, 1, new ymaps.Placemark([xCoord, yCoord]));
+
+                    memoryLocation.value = `[${xCoord.toFixed(6)},${yCoord.toFixed(6)}]`
+                })
+            }
+        )
+    }
+</script>
+{% endblock script %}

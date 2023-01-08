@@ -4,7 +4,24 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="61c2e4b1-d734-424e-8de1-8a88777ab6a3" name="Changes" comment="" />
+    <list default="true" id="61c2e4b1-d734-424e-8de1-8a88777ab6a3" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/project/memory/forms.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/project/memory/urls.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/project/memory/utils.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/project/memory/validators.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/project/templates/base_template.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/project/templates/base_template_with_header.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/project/templates/create_memory.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/project/templates/error_404_template.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/project/templates/list_memory.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/project/templates/welcome.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/memory/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/project/memory/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/memory/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/project/memory/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/memory/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/project/memory/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/project/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/project/project/urls.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -31,6 +48,7 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;ASKED_MARK_IGNORED_FILES_AS_EXCLUDED&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
@@ -65,7 +83,8 @@
       <workItem from="1672679052236" duration="13260000" />
       <workItem from="1672742249586" duration="4015000" />
       <workItem from="1672771933360" duration="28935000" />
-      <workItem from="1673009421428" duration="27841000" />
+      <workItem from="1673009421428" duration="28749000" />
+      <workItem from="1673211763512" duration="3998000" />
     </task>
     <servers />
   </component>

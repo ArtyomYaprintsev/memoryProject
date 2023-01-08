@@ -1,6 +1,7 @@
 /venv
 /project/project/settings.py
-/project/db.qlite3
+/project/db.sqlite3
+/project/static/admin
 
 *migrations
 *.pyc

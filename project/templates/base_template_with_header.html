@@ -1,0 +1,25 @@
+{% extends 'base_template.html' %}
+
+{% block header %}
+<div style="border-bottom: 1px solid lightgray;" class="mb-3">
+    <ul class="nav justify-content-around"
+        style="align-items: center;">
+        {% if user_error %}
+        <li class="nav-item">
+            <p>{{ user_error }}</p>
+        </li>
+        {% else %}
+        <li class="nav-item">
+            <img src="{{ user_picture }}" alt="Avatar"
+                 class="rounded mx-auto"
+                 style="aspect-ratio: 1 / 1; width: 50px;"
+            />
+            <span>{{ user_name }}</span>
+        </li>
+        {% endif %}
+        <li class="nav-item ms-5" style="height: 100%">
+            <a href="{% url 'logout' %}">Logout</a>
+        </li>
+    </ul>
+</div>
+{% endblock header %}

@@ -1,0 +1,29 @@
+{% extends 'base_template.html' %}
+
+{% block title %}Welcome Page{% endblock title %}
+
+{% block content %}
+<div class="container pt-3">
+    <div class="row m-0">
+        <div class="col">
+            <p class="fs-3">В этом сервисе Вы можете хранить свои свои
+                впечатления о посещаемых местах.</p>
+            <p>Сайт создан в качестве тестового задания для компании
+                <a class="link-danger" href="https://www.interesnee.ru/">Очень
+                    интересно</a>.
+            </p>
+
+            {% if user.is_authenticated %}
+                <p>Вы авторизованы как {{ user.username }}, можете перейти на
+                    <a href="{% url 'list_memory' %}">Главную страницу</a>
+                    или <a href="{% url 'logout' %}">Выйти.</a>
+                </p>
+            {% else %}
+                {% load socialaccount %}
+                <a href="{% provider_login_url 'google' %}">Google авторизация.</a> <br />
+                <a href="{% provider_login_url 'vk' %}">Vk авторизация.</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock content %}

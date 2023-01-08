@@ -1,0 +1,180 @@
+{% extends "base_template_with_header.html" %}
+
+{% block styles %}
+<style>
+    #memory-view {
+        appearance: none;
+    }
+
+    #memory-view-label {
+        margin-left: auto;
+        margin-bottom: 20px;
+
+        padding: 5px 5px;
+        border-radius: 5px;
+
+        display: flex;
+        width: fit-content;
+        column-gap: 5px;
+
+        background-color: var(--bs-gray);
+    }
+
+    #memory-view-label:hover {
+        cursor: pointer;
+    }
+
+    #memory-view-label > * {
+        aspect-ratio: 1 / 1;
+        border-radius: 5px;
+
+        padding: 2px 5px 3px;
+    }
+
+    #memory-view:checked ~ * #memory-view-table-label {
+        background-color: var(--bs-primary);
+    }
+
+    #memory-view:not(:checked) ~ * #memory-view-map-label {
+        background-color: var(--bs-primary);
+    }
+
+    #memory-map {
+        display: none;
+
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        max-height: 600px;
+
+        background-color: green;
+    }
+
+    #memory-view:not(:checked) ~ #memory-map {
+        display: block;
+    }
+
+    #memory-view:not(:checked) ~ #memory-table {
+        visibility: collapse;
+    }
+
+</style>
+{% endblock styles %}
+
+{% block content %}
+<div class="list-memory-page">
+    <input type="checkbox" name="abc" id="memory-view" checked/>
+
+    <label for="memory-view" id="memory-view-label">
+        <span id="memory-view-table-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                 fill="currentColor" class="bi bi-table"
+                 viewBox="0 0 16 16">
+                <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm15 2h-4v3h4V4zm0 4h-4v3h4V8zm0 4h-4v3h3a1 1 0 0 0 1-1v-2zm-5 3v-3H6v3h4zm-5 0v-3H1v2a1 1 0 0 0 1 1h3zm-4-4h4V8H1v3zm0-4h4V4H1v3zm5-3v3h4V4H6zm4 4H6v3h4V8z"/>
+            </svg>
+        </span>
+        <span id="memory-view-map-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                 fill="currentColor" class="bi bi-map" viewBox="0 0 16 16">
+                <path fill-rule="evenodd"
+                      d="M15.817.113A.5.5 0 0 1 16 .5v14a.5.5 0 0 1-.402.49l-5 1a.502.502 0 0 1-.196 0L5.5 15.01l-4.902.98A.5.5 0 0 1 0 15.5v-14a.5.5 0 0 1 .402-.49l5-1a.5.5 0 0 1 .196 0L10.5.99l4.902-.98a.5.5 0 0 1 .415.103zM10 1.91l-4-.8v12.98l4 .8V1.91zm1 12.98 4-.8V1.11l-4 .8v12.98zm-6-.8V1.11l-4 .8v12.98l4-.8z"/>
+            </svg>
+        </span>
+    </label>
+
+    {% if memories %}
+    <table class="table table-striped" id="memory-table">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Название</th>
+            <th scope="col">Описание</th>
+            <th scope="col">Дата создания</th>
+            <th scope="col">Коррдинаты</th>
+            <th scope="col">Управление</th>
+        </tr>
+        </thead>
+        <tbody id="memory-container">
+        {% for memory in memories %}
+        <tr data-memory="{{ memory }}">
+            <th scope="row">{{ memory.id }}</th>
+            <td>{{ memory.name }}</td>
+            <td>{{ memory.description }}</td>
+            <td>{{ memory.created_date }}</td>
+            <td>{{ memory.location }}</td>
+            <td>
+                <a href="{% url 'edit_memory' memory_id=memory.id %}"
+                   class="link-warning ">Edit</a><br/>
+                <a href="{% url 'delete_memory' memory_id=memory.id %}"
+                   class="link-danger">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <h3>У вас нет ни одного воспоминания.</h3>
+    {% endif %}
+
+    <div class="memory-map" id="memory-map"></div>
+
+    {% if not user_error %}
+    <a href="{% url 'create_memory' %}" class="btn btn-primary">
+        Добавить воспоминание
+    </a>
+    {% endif %}
+
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+        <div
+            {% if message.tags %}
+            class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-{{ message.tags}}{% endif %}"
+            {% endif %}
+            role="alert"
+        >
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+{% endblock content %}
+
+{% block script %}
+<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=d0e22896-d79d-4c71-90f1-602a28925377"
+        type="text/javascript"></script>
+
+<script>
+    const memoriesContainer = document.getElementById("memory-container")
+
+    const memoriesList = memoriesContainer ?
+        [...memoriesContainer.children]
+        .filter(item => item.dataset?.memory)
+        .map(item => item.dataset?.memory)
+        .map(item => JSON.parse(item.replace(/'/g, '"'))) :
+        []
+
+    ymaps.ready(
+        function () {
+            const myMap = new ymaps.Map('memory-map', {
+                center: [56.838095, 60.603567],
+                zoom: [18]
+            })
+
+            memoriesList.map(memory =>
+                myMap.geoObjects.add(
+                    new ymaps.Placemark(
+                        JSON.parse(memory.location), {
+                            balloonContent: memory.description,
+                            hintContent: memory.name
+                        }, {
+                            iconColor: "#ff0000"
+                        }
+                    )
+                )
+            )
+        }
+    )
+</script>
+
+{% endblock script %}
